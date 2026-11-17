@@ -1,5 +1,7 @@
 # 一碰传 · NfcTapLink
 
+[![Build Android](https://github.com/CC2027MK2/NfcTapLink/actions/workflows/build-android.yml/badge.svg?branch=main)](https://github.com/CC2027MK2/NfcTapLink/actions/workflows/build-android.yml)
+
 碰一下 NFC 标签，文件就在手机和电脑之间流动。
 
 - 手机碰标签：把照片、文档、APK 等任意文件传到电脑，电脑上立刻可见、可预览、可直接拖进微信 / 钉钉。
