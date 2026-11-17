@@ -6,7 +6,8 @@ plugins {
 
 def ksProps = new Properties()
 def ksFile = rootProject.file('keystore.properties')
-if (ksFile.exists()) {
+def hasReleaseKey = ksFile.exists()
+if (hasReleaseKey) {
     ksFile.withInputStream { ksProps.load(it) }
 }
 
@@ -20,10 +21,15 @@ android {
 
     signingConfigs {
         release {
-            storeFile rootProject.file(ksProps['storeFile'] ?: 'release.keystore')
-            storePassword ksProps['storePassword']
-            keyAlias ksProps['keyAlias']
-            keyPassword ksProps['keyPassword']
+            // 签名是 opt-in：只有 android/keystore.properties 存在时才配置 release 签名。
+            // 没有该文件时 release 变体不带签名配置，产出 app-release-unsigned.apk，
+            // 这样缺密钥的机器（含 CI）也能跑 assembleRelease，且不需要在流水线里生成密钥。
+            if (hasReleaseKey) {
+                storeFile rootProject.file(ksProps['storeFile'] ?: 'release.keystore')
+                storePassword ksProps['storePassword']
+                keyAlias ksProps['keyAlias']
+                keyPassword ksProps['keyPassword']
+            }
         }
     }
 
@@ -40,7 +46,9 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+            if (hasReleaseKey) {
+                signingConfig signingConfigs.release
+            }
         }
         debug {
             minifyEnabled false
