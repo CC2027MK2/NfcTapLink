@@ -40,6 +40,11 @@ jobs:
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          # 该 action 默认安装 "tools platform-tools"，但 Android 仓库已不再提供独立的
+          # tools 包（sdkmanager 会报 "Warning: Failed to find package 'tools'" 并以 1 退出），
+          # 因此显式列出需要安装的包。
+          packages: "platforms;android-34 build-tools;34.0.0"
 
       - name: Ensure Android SDK 34
         run: |
