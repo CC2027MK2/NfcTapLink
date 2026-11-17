@@ -110,3 +110,9 @@ gradle assembleRelease
 
 - 桌面端：6.2.5
 - 手机端源码：6.2.5（`versionCode 15`）
+
+## 许可证
+
+本项目以 [MIT 许可证](LICENSE) 发布，版权归 NfcTapLink contributors 所有。
+
+你可以自由使用、修改、分发，也可以用于商业用途，只需在副本或重要部分中保留版权声明与许可声明；软件按「原样」提供，不附带任何担保。
