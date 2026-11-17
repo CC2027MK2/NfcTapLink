@@ -1,0 +1,63 @@
+// NfcTapLink · app 模块
+// 纯 Java + Android SDK，零第三方库；v3 不把任何密钥 / device_id 注入构建产物。
+plugins {
+    id 'com.android.application'
+}
+
+def ksProps = new Properties()
+def ksFile = rootProject.file('keystore.properties')
+if (ksFile.exists()) {
+    ksFile.withInputStream { ksProps.load(it) }
+}
+
+android {
+    namespace 'com.example.nfctaplink'
+    compileSdk 34
+
+    buildFeatures {
+        buildConfig false
+    }
+
+    signingConfigs {
+        release {
+            storeFile rootProject.file(ksProps['storeFile'] ?: 'release.keystore')
+            storePassword ksProps['storePassword']
+            keyAlias ksProps['keyAlias']
+            keyPassword ksProps['keyPassword']
+        }
+    }
+
+    defaultConfig {
+        applicationId "com.example.nfctaplink"
+        minSdk 26
+        targetSdk 34
+        versionCode 15
+        versionName "6.2.5"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            minifyEnabled false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    // 当前离线 Gradle 缓存没有 lint-gradle；安全回归由编译 + adb 真机链路验证。
+    lint {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+}
+
+dependencies {
+}

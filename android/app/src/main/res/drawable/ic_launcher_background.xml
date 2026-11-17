@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 自适应图标 · 背景层：整幅铺满，不留透明角，任何系统遮罩下都不会露白底 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#0F1115"
+        android:pathData="M0,0 H108 V108 H0 Z" />
+    <path
+        android:fillColor="#161A21"
+        android:pathData="M18,54 a36,36 0 1,0 72,0 a36,36 0 1,0 -72,0 Z" />
+    <path
+        android:strokeColor="#262C38"
+        android:strokeWidth="2"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M18,54 a36,36 0 1,0 72,0 a36,36 0 1,0 -72,0 Z" />
+</vector>

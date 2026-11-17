@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- NfcTapLink 暗色视觉基线；电脑端使用同一组色值，不另起一套 -->
+<resources>
+    <!-- 背景层级 -->
+    <color name="bg_page">#0F1115</color>
+    <color name="bg_panel">#161A21</color>
+    <color name="bg_card">#1B2029</color>
+    <color name="stroke">#262C38</color>
+    <color name="divider">#20252F</color>
+
+    <!-- 文字层级 -->
+    <color name="text_primary">#E8EBF2</color>
+    <color name="text_secondary">#9AA3B5</color>
+    <color name="text_tertiary">#6B7280</color>
+
+    <!-- 强调与状态 -->
+    <color name="accent">#4FD1C5</color>
+    <color name="accent_indigo">#7C8CF8</color>
+    <color name="success">#3DD68C</color>
+    <color name="warning">#F5A524</color>
+    <color name="danger">#F04438</color>
+
+    <!-- 主色按钮上的深色文字，直接复用页面底色 -->
+    <color name="on_accent">#0F1115</color>
+
+    <!-- 按压态只做同色透明叠加，不引入新的品牌色 -->
+    <color name="ripple_on_accent">#33000000</color>
+    <color name="ripple_accent">#334FD1C5</color>
+    <color name="ripple_neutral">#1FFFFFFF</color>
+    <color name="ripple_danger">#33F04438</color>
+</resources>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  NfcTapLink 手机端 · 完整 AndroidManifest.xml（本次实际编译安装的版本）
+
+  两个入口：
+   - ACTION_NDEF_DISCOVERED + nfctap://pair  -> 碰标签时由系统拉起本 App
+   - ACTION_SEND + */*                     -> 任意应用「分享 → 一碰传」寄存待发文件
+     （v5 起支持 Word/Excel/PPT/PDF/APK/压缩包等，不再限 image/*）
+  主界面：MainActivity（配置地址、写标签、查看状态）
+
+  派发行为（真机实测）：App 前台可见时走 enableForegroundDispatch，碰标签
+  直接进 TapActivity、无任何确认；App 不在前台时由系统 NFC 服务发一条
+  「发现NFC卡片」通知，需点一次「打开」，App 侧无法绕过。
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- v4 免寄存：碰标签时读取媒体库最新一张图。
+         API 33+ 用 READ_MEDIA_IMAGES；34+ 另有「部分照片访问」；
+         API 32 及以下用 READ_EXTERNAL_STORAGE。
+         系统照片选择器 ACTION_PICK_IMAGES 本身不需要任何存储权限。 -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+                     android:maxSdkVersion="32" />
+
+    <!-- v2 自动发现：Android 默认过滤非本机地址的组播包，
+         不持 MulticastLock 就收不到电脑的 UDP 应答。 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <!-- Android 13+ 访问 Wi-Fi 相关能力的运行时权限；本方案不取位置。 -->
+    <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES"
+                     android:usesPermissionFlags="neverForLocation" />
+
+    <!-- v3 BLE 广播发现：Android 12+ 用 BLUETOOTH_SCAN/CONNECT，
+         neverForLocation 声明不通过扫描推断位置；Android 11 及以下走旧权限。 -->
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"
+                     android:usesPermissionFlags="neverForLocation" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH"
+                     android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"
+                     android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"
+                     android:maxSdkVersion="30" />
+
+    <uses-feature android:name="android.hardware.nfc" android:required="true" />
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="false" />
+
+    <application
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.NfcTapLink"
+        android:usesCleartextTraffic="true"
+        android:networkSecurityConfig="@xml/network_security_config">
+
+        <!-- 入口 A/B：碰 NFC 标签 / 图库分享 -->
+        <activity
+            android:name=".TapActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.NfcTapLink">
+
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="nfctap" android:host="pair" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
+        </activity>
+
+        <!-- 主界面 -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

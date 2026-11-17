@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 碰标签后的确认窗：5 秒自动取消，只有点「立即发送」才上传 -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/page_margin">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_dialog"
+        android:orientation="vertical"
+        android:padding="@dimen/space_md">
+
+        <TextView
+            style="@style/TextAppearance.NfcTap.Section"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="确认传送" />
+
+        <TextView
+            android:id="@+id/tvConfirmName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_sm"
+            android:ellipsize="middle"
+            android:fontFamily="sans-serif-medium"
+            android:lineSpacingMultiplier="1.5"
+            android:maxLines="2"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/text_section" />
+
+        <TextView
+            android:id="@+id/tvConfirmSize"
+            style="@style/TextAppearance.NfcTap.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xs" />
+
+        <TextView
+            android:id="@+id/tvConfirmCountdown"
+            style="@style/TextAppearance.NfcTap.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xs"
+            android:textColor="@color/warning" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/hairline"
+            android:layout_marginTop="@dimen/space_md"
+            android:background="@color/divider" />
+
+        <Button
+            android:id="@+id/btnSendNow"
+            style="@style/Widget.NfcTap.Button.Primary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_sm"
+            android:text="立即发送" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xs"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnPickOther"
+                style="@style/Widget.NfcTap.Button.Secondary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="改选文件" />
+
+            <Button
+                android:id="@+id/btnConfirmCancel"
+                style="@style/Widget.NfcTap.Button.Ghost"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_xs"
+                android:layout_weight="1"
+                android:text="取消" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

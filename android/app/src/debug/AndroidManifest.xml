@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  debug 构建专属 Manifest（与主 Manifest 合并，release 不含此文件）
+  仅声明真机自检入口，用于在无物理标签时注入真实 NdefMessage 验证全链路。
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <activity
+            android:name=".SelfTestActivity"
+            android:exported="true"
+            android:theme="@style/Theme.NfcTapLink" />
+    </application>
+</manifest>

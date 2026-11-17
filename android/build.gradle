@@ -1,0 +1,24 @@
+// NfcTapLink · 根构建脚本
+// AGP 版本必须与本机 ~/.gradle/caches 里已有的 8.5.2 一致，否则离线构建会失败。
+buildscript {
+    repositories {
+        // 离线构建：仓库声明只用于给坐标一个解析入口，
+        // `--offline` 会强制 Gradle 只查 ~/.gradle/caches/modules-2 而不联网。
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.5.2'
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+tasks.register('clean', Delete) {
+    delete rootProject.buildDir
+}

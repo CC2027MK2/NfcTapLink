@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  res/xml/network_security_config.xml
+  v3：本 App 允许 cleartext 是因为局域网 IP 无法直接签发受信任 TLS 证书。
+  明文 HTTP **仅承载应用层加密载荷**：配对密钥 k 永不上网，双向 challenge-response
+  校验 server_proof；上传体有独立加密与 MAC，nonce 一次性。
+  这里没有、也不能通过 domain 配置限定 CIDR；不要把 cleartext 当成传输安全依据，
+  真正的机密性与完整性由 nfctap/3 协议层保证。
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

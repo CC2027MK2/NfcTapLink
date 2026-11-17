@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 传送进度窗：不可取消，避免误触打断上传 -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/page_margin">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_dialog"
+        android:orientation="vertical"
+        android:padding="@dimen/space_md">
+
+        <TextView
+            style="@style/TextAppearance.NfcTap.Section"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="正在传送" />
+
+        <ProgressBar
+            android:id="@+id/pbTransfer"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_marginTop="@dimen/space_md"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/accent"
+            android:progressBackgroundTint="@color/divider" />
+
+        <TextView
+            android:id="@+id/tvProgressMsg"
+            style="@style/TextAppearance.NfcTap.Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_sm"
+            android:text="正在寻找电脑…" />
+
+        <TextView
+            android:id="@+id/tvProgressFile"
+            style="@style/TextAppearance.NfcTap.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xs"
+            android:ellipsize="middle"
+            android:maxLines="2" />
+
+        <TextView
+            style="@style/TextAppearance.NfcTap.CaptionWeaker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_md"
+            android:text="请保持手机靠近电脑，传送期间不要锁屏。" />
+    </LinearLayout>
+</FrameLayout>

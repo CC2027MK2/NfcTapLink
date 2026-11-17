@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 间距一律 8 的倍数；页面边距 24 -->
+<resources>
+    <dimen name="page_margin">24dp</dimen>
+    <dimen name="space_xs">8dp</dimen>
+    <dimen name="space_sm">16dp</dimen>
+    <dimen name="space_md">24dp</dimen>
+    <dimen name="space_lg">32dp</dimen>
+
+    <dimen name="radius_control">10dp</dimen>
+    <dimen name="radius_card">16dp</dimen>
+    <dimen name="radius_pill">999dp</dimen>
+
+    <dimen name="control_height">48dp</dimen>
+    <dimen name="dot_size">8dp</dimen>
+    <dimen name="hairline">1dp</dimen>
+
+    <dimen name="text_title">20sp</dimen>
+    <dimen name="text_section">16sp</dimen>
+    <dimen name="text_body">14sp</dimen>
+    <dimen name="text_caption">12sp</dimen>
+</resources>

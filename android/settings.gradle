@@ -1,0 +1,19 @@
+// NfcTapLink · Gradle 设置
+// 构建环境：AGP 8.5.2 + Gradle 8.7，依赖从 google() / mavenCentral() 解析。
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = "NfcTapLink"
+include ':app'

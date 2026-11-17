@@ -1,0 +1,30 @@
+# 本机密钥与运行数据（绝不入库）
+config.json
+config.seed.json
+keystore.properties
+*.keystore
+*.jks
+transfer.log.jsonl*
+received/
+outbox/
+tag_backup/
+selftest_result.json
+
+# 构建产物
+__pycache__/
+*.py[cod]
+desktop/desktop_build/build/
+desktop/desktop_build/dist/
+desktop/desktop_build/dist_*/
+android/.gradle/
+android/build/
+android/app/build/
+android/app/build_locked*/
+android/local.properties
+gradle.properties.bak
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store

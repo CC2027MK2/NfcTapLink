@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  碰标签后的即时状态页。
+  为什么需要它：TapActivity 之前全程没有 setContentView，窗口只有深色
+  windowBackground，碰标签后到文件选择器出现之间是纯深色空窗（真机表现为“黑屏”）。
+  这里先画出一个可见的“正在连接”，网络与配对都在后台线程跑。
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_page"
+    android:padding="@dimen/page_margin">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:id="@+id/pbTapStatus"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/accent" />
+
+        <TextView
+            android:id="@+id/tvTapStatus"
+            style="@style/TextAppearance.NfcTap.Section"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_md"
+            android:gravity="center"
+            android:text="正在读取标签…" />
+
+        <TextView
+            android:id="@+id/tvTapHint"
+            style="@style/TextAppearance.NfcTap.CaptionWeaker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xs"
+            android:gravity="center"
+            android:text="请保持手机贴近电脑" />
+    </LinearLayout>
+</FrameLayout>

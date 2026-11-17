@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- NfcTapLink · 主界面：暗色低饱和，用层级与留白分区，不靠满屏描边 -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_page"
+    android:fillViewport="true"
+    android:overScrollMode="ifContentScrolls"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/page_margin"
+        android:paddingTop="@dimen/page_margin"
+        android:paddingEnd="@dimen/page_margin"
+        android:paddingBottom="@dimen/space_lg">
+
+        <!-- 标题区 -->
+        <TextView
+            style="@style/TextAppearance.NfcTap.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="一碰传" />
+
+        <TextView
+            style="@style/TextAppearance.NfcTap.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xs"
+            android:text="碰一下标签，把文件安全传到同一局域网内的电脑" />
+
+        <!-- 状态卡：常态只保留这一块 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_md"
+            android:background="@drawable/bg_card"
+            android:orientation="vertical"
+            android:padding="@dimen/space_sm">
+
+            <TextView
+                style="@style/TextAppearance.NfcTap.CaptionWeaker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="当前状态" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xs"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <View
+                    android:id="@+id/dotState"
+                    android:layout_width="@dimen/dot_size"
+                    android:layout_height="@dimen/dot_size"
+                    android:background="@drawable/bg_dot" />
+
+                <TextView
+                    android:id="@+id/tvStatus"
+                    style="@style/TextAppearance.NfcTap.Body"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_xs"
+                    android:layout_weight="1"
+                    android:text="待命" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvNfcWarn"
+                style="@style/TextAppearance.NfcTap.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xs"
+                android:textColor="@color/warning"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <!-- 连接设置入口：默认收起，点开才铺开详情与配置 -->
+        <Button
+            android:id="@+id/btnSettings"
+            style="@style/Widget.NfcTap.Button.Secondary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_md"
+            android:text="连接设置  ▾" />
+
+        <LinearLayout
+            android:id="@+id/panelSettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <!-- 连接详情 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_sm"
+                android:background="@drawable/bg_card"
+                android:orientation="vertical"
+                android:padding="@dimen/space_sm">
+
+                <TextView
+                    style="@style/TextAppearance.NfcTap.CaptionWeaker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="电脑地址" />
+
+                <TextView
+                    android:id="@+id/tvHostValue"
+                    style="@style/TextAppearance.NfcTap.Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_xs"
+                    android:breakStrategy="simple"
+                    android:text="自动发现 · 端口 8765" />
+
+                <TextView
+                    style="@style/TextAppearance.NfcTap.CaptionWeaker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_sm"
+                    android:text="配对状态" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_xs"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:id="@+id/dotPair"
+                        android:layout_width="@dimen/dot_size"
+                        android:layout_height="@dimen/dot_size"
+                        android:background="@drawable/bg_dot" />
+
+                    <TextView
+                        android:id="@+id/tvPairValue"
+                        style="@style/TextAppearance.NfcTap.Body"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_xs"
+                        android:layout_weight="1"
+                        android:text="未配对" />
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextAppearance.NfcTap.CaptionWeaker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_sm"
+                    android:text="设备 ID" />
+
+                <TextView
+                    android:id="@+id/tvDeviceValue"
+                    style="@style/TextAppearance.NfcTap.Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_xs"
+                    android:breakStrategy="simple"
+                    android:text="未配置配对密钥" />
+
+                <TextView
+                    style="@style/TextAppearance.NfcTap.CaptionWeaker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_sm"
+                    android:text="寄存文件" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_xs"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:id="@+id/dotPending"
+                        android:layout_width="@dimen/dot_size"
+                        android:layout_height="@dimen/dot_size"
+                        android:background="@drawable/bg_dot" />
+
+                    <TextView
+                        android:id="@+id/tvPendingValue"
+                        style="@style/TextAppearance.NfcTap.Body"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_xs"
+                        android:layout_weight="1"
+                        android:maxLines="2"
+                        android:ellipsize="middle"
+                        android:text="暂无寄存文件" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 连接参数 -->
+            <TextView
+                style="@style/TextAppearance.NfcTap.CaptionWeaker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_sm"
+                android:text="电脑 IP 留空时由手机自动发现" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_sm"
+                android:background="@drawable/bg_card"
+                android:orientation="vertical"
+                android:padding="@dimen/space_sm">
+
+                <TextView
+                    style="@style/TextAppearance.NfcTap.CaptionWeaker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="电脑局域网 IP" />
+
+                <EditText
+                    android:id="@+id/etHost"
+                    style="@style/Widget.NfcTap.Input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_xs"
+                    android:hint="留空自动发现，例如 192.168.1.20"
+                    android:importantForAutofill="no"
+                    android:inputType="textUri" />
+
+                <TextView
+                    style="@style/TextAppearance.NfcTap.CaptionWeaker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_sm"
+                    android:text="端口" />
+
+                <EditText
+                    android:id="@+id/etPort"
+                    style="@style/Widget.NfcTap.Input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_xs"
+                    android:hint="8765"
+                    android:importantForAutofill="no"
+                    android:inputType="number" />
+
+                <TextView
+                    style="@style/TextAppearance.NfcTap.CaptionWeaker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_sm"
+                    android:text="配对密钥" />
+
+                <EditText
+                    android:id="@+id/etCode"
+                    style="@style/Widget.NfcTap.Input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_xs"
+                    android:hint="64 位十六进制，碰标签可自动填入"
+                    android:importantForAutofill="no"
+                    android:inputType="textVisiblePassword" />
+
+                <TextView
+                    style="@style/TextAppearance.NfcTap.CaptionWeaker"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_sm"
+                    android:text="密钥只在本机参与身份认证，不会上传到网络。" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnSave"
+                style="@style/Widget.NfcTap.Button.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_md"
+                android:text="保存配置" />
+
+            <Button
+                android:id="@+id/btnWriteTag"
+                style="@style/Widget.NfcTap.Button.Secondary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xs"
+                android:text="写入 NFC 标签" />
+
+            <Button
+                android:id="@+id/btnMode"
+                style="@style/Widget.NfcTap.Button.Secondary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xs"
+                android:text="取文件模式：每次碰标签选文件" />
+
+            <Button
+                android:id="@+id/btnClearPending"
+                style="@style/Widget.NfcTap.Button.DangerGhost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xs"
+                android:text="清除寄存文件" />
+
+            <!-- 使用说明 -->
+            <TextView
+                style="@style/TextAppearance.NfcTap.Section"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_lg"
+                android:text="使用说明" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_sm"
+                android:background="@drawable/bg_panel"
+                android:orientation="vertical"
+                android:padding="@dimen/space_sm">
+
+                <TextView
+                    style="@style/TextAppearance.NfcTap.Body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="碰标签传送" />
+
+                <TextView
+                    style="@style/TextAppearance.NfcTap.Caption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_xs"
+                    android:text="碰一下标签，选择文件并确认后开始传送。" />
+
+                <TextView
+                    style="@style/TextAppearance.NfcTap.Body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_sm"
+                    android:text="分享寄存" />
+
+                <TextView
+                    style="@style/TextAppearance.NfcTap.Caption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_xs"
+                    android:text="在任意应用里选择「分享 → 一碰传」把文件寄存，碰标签即传。" />
+
+                <TextView
+                    style="@style/TextAppearance.NfcTap.Body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_sm"
+                    android:text="取文件模式" />
+
+                <TextView
+                    style="@style/TextAppearance.NfcTap.Caption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_xs"
+                    android:text="每次选文件、自动取最近图片、仅用寄存文件，可在上方按钮切换。" />
+
+                <TextView
+                    style="@style/TextAppearance.NfcTap.Body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_sm"
+                    android:text="安全说明" />
+
+                <TextView
+                    style="@style/TextAppearance.NfcTap.Caption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_xs"
+                    android:text="文件只保存到电脑的 received 目录，不会自动打开或运行。" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            style="@style/TextAppearance.NfcTap.CaptionWeaker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_md"
+            android:gravity="center"
+            android:text="局域网直连 · 不经过第三方服务器" />
+    </LinearLayout>
+</ScrollView>
