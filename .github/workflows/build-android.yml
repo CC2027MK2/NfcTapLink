@@ -1,7 +1,12 @@
 name: Build Android
 
-# 本仓库没有 gradle wrapper（android/gradlew 与 gradle-wrapper.jar 都不入库），
-# 因此由 gradle/actions/setup-gradle@v3 按 gradle-version 提供 Gradle 8.7。
+# 本仓库不入库 gradle wrapper（android/gradlew 与 gradle-wrapper.jar 都不提交），
+# 因此由 gradle/actions/setup-gradle 按 gradle-version 提供 Gradle 8.7。
+#
+# 签名是 opt-in：仓库里不存在任何 keystore。配置了 4 个仓库 Secret 之后，CI 在构建前把
+# 签名材料还原到 android/ 下（该路径已被 .gitignore 忽略），产出签名包并附到 Release；
+# 未配置时自动退回未签名构建，流水线依然为绿。
+
 on:
   push:
     branches:
@@ -14,7 +19,14 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write   # tag 构建成功时用 gh release upload 挂附件
+
+env:
+  # 签名 Secret 提到 workflow 级：step 的 if 只能可靠地读到 workflow/job 级 env。
+  KS_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+  KS_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+  KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+  KEY_PASS: ${{ secrets.ANDROID_KEY_PASSWORD }}
 
 jobs:
   build:
@@ -35,21 +47,32 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: "8.7"
-          # setup-gradle 已经缓存 ~/.gradle/caches 与 ~/.gradle/wrapper，
-          # 再叠一层 actions/cache 只是重复缓存，所以这里不再添加。
+          # setup-gradle 已缓存 ~/.gradle/caches 与 ~/.gradle/wrapper，无需再叠 actions/cache。
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
         with:
-          # 该 action 默认安装 "tools platform-tools"，但 Android 仓库已不再提供独立的
-          # tools 包（sdkmanager 会报 "Warning: Failed to find package 'tools'" 并以 1 退出），
-          # 因此显式列出需要安装的包。
+          # 该 action 默认 packages 为 "tools platform-tools"，但 Android 仓库已不再提供
+          # 独立的 tools 包（sdkmanager 会 Failed to find package 'tools' 并 exit 1），
+          # 所以必须显式列出需要的包。
           packages: "platforms;android-34 build-tools;34.0.0"
 
       - name: Ensure Android SDK 34
         run: |
           yes | sdkmanager --install "platforms;android-34" "build-tools;34.0.0" > /dev/null || true
           sdkmanager --list_installed | grep -E "platforms;android-34|build-tools;34\.0\.0"
+
+      # 只在 Secret 存在时还原签名材料；否则整个步骤跳过，走未签名分支。
+      - name: Restore signing material
+        if: env.KS_B64 != ''
+        run: |
+          set -euo pipefail
+          printf '%s' "$KS_B64" | base64 -d > android/release.keystore
+          printf 'storeFile=release.keystore\nstorePassword=%s\nkeyAlias=%s\nkeyPassword=%s\n' \
+            "$KS_PASS" "$KEY_ALIAS" "$KEY_PASS" > android/keystore.properties
+          # 只回报文件名、尺寸与别名，绝不打印口令或密钥内容。
+          ls -l android/release.keystore android/keystore.properties
+          echo "restored signing material, keyAlias=$KEY_ALIAS"
 
       - name: Toolchain versions
         run: |
@@ -61,7 +84,16 @@ jobs:
           cd android
           gradle assembleDebug assembleRelease --no-daemon --stacktrace
 
-      # 仓库里不放 keystore 与任何签名材料：CI 既不伪造签名，也不在流水线里生成密钥。
+      # 绿 ≠ 签上了：显式验签，把证书指纹打到日志里备查。
+      - name: Verify release signing
+        if: env.KS_B64 != ''
+        run: |
+          set -euo pipefail
+          BT=$(ls -d "$ANDROID_HOME"/build-tools/* | tail -1)
+          APK=$(ls android/app/build/outputs/apk/release/*.apk | grep -v unsigned | head -1)
+          echo "verifying: $APK"
+          "$BT/apksigner" verify --print-certs "$APK"
+
       - name: Upload APKs
         if: success()
         uses: actions/upload-artifact@v4
@@ -70,3 +102,24 @@ jobs:
           path: android/app/build/outputs/apk/**/*.apk
           retention-days: 30
           if-no-files-found: error
+
+      # 只有签名包才允许进 Release；未签名构建绝不外发。
+      - name: Attach signed APK to release
+        if: startsWith(github.ref, 'refs/tags/') && env.KS_B64 != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          TAG="$GITHUB_REF_NAME"
+          APK=$(ls android/app/build/outputs/apk/release/*.apk | grep -v unsigned | head -1)
+          echo "target release: $TAG, apk: $APK"
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            gh release upload "$TAG" "$APK" --repo "$GITHUB_REPOSITORY" --clobber
+          else
+            gh release create "$TAG" "$APK" --repo "$GITHUB_REPOSITORY" --verify-tag \
+              --title "NfcTapLink $TAG" --generate-notes
+          fi
+
+      - name: Clean up signing material
+        if: always()
+        run: rm -f android/release.keystore android/keystore.properties
